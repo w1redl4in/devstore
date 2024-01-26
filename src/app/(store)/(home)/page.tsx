@@ -5,7 +5,13 @@ import { Product } from '@/app/data/types/product'
 import { formatCurrencyInBRL } from '@/app/utils/format-currency'
 
 async function getFeaturedProducts(): Promise<Product[]> {
-  const products = (await api('/products/featured')).json()
+  const response = await api('/products/featured', {
+    next: {
+      revalidate: 60 * 60,
+    },
+  })
+  const products = await response.json()
+
   return products
 }
 
